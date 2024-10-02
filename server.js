@@ -269,10 +269,3 @@ app.put('/api/v1/comments/:id',async(req,res)=>{
 
 const PORT = process.env.PORT || 6800
 app.listen(PORT, console.log(`Server is running on PORT ${PORT}`));
-
-// this is for check
-
-// checking from limon
-
-//checking from risan
-//hello again
