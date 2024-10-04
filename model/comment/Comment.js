@@ -19,3 +19,7 @@ const commentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+//compile schema to from a model
+const Comment = mongoose.model("Comment", commentSchema);
+module.exports = Comment;
