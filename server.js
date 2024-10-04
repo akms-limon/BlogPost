@@ -13,7 +13,10 @@ const app = express();
 
 //middlewares
 app.use(express.json()); // pass incomming data
-
+// configure ejs
+app.set("view engine","ejs");
+//serve static files
+app.use(express.static(__dirname,+"/public"));
 // session config
 app.use(
     session({
@@ -26,6 +29,12 @@ app.use(
         }),
     }
 ));
+
+//render homepage
+app.get('/',(req,res)=>{
+res.render('index');
+});
+
 //users route
 app.use('/api/v1/users', userRoutes);
 
