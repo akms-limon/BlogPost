@@ -17,6 +17,40 @@ const userRoutes = express.Router();
 //Instance of multer
 const upload = multer({storage});
 
+//---
+//rendering forms
+
+//login form
+userRoutes.get('/login',(req,res)=>{
+res.render('users/login');
+});
+
+//register form
+userRoutes.get('/register',(req,res)=>{
+    res.render('users/register');
+    });
+
+//profile template 
+userRoutes.get('/profile-page',(req,res)=>{
+    res.render('users/profile');
+    });
+
+
+//upload profile photo
+userRoutes.get('/upload-profile-photo-form',(req,res)=>{
+    res.render('users/uploadProfilePhoto');
+    });
+
+//upload cover photo
+userRoutes.get('/upload-cover-photo-form',(req,res)=>{
+    res.render('users/uploadCoverPhoto');
+    });
+
+//update user
+    userRoutes.get('/update-user-form',(req,res)=>{
+        res.render('users/updateUser');
+        });
+
 //POST/api/v1/users/register
 userRoutes.post('/register', registerCtrl);
 
