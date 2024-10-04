@@ -12,14 +12,13 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    catagory: {
+    category: {
       type: String,
       required: true,
       enum: ["react js", "html", "css", "node js", "javascript", "other"],
     },
     image: {
       type: String,
-      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +26,7 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     comments: [{
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:'Comment'
     },]
   },
@@ -36,5 +35,5 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-const Post = mongoose.model("POst", postSchema);
-module.exports = post;
+const Post = mongoose.model("Post", postSchema);
+module.exports = Post;
