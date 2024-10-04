@@ -14,7 +14,6 @@ const {
 } = require("../../controllers/users/users");
 const protected = require("../../middlewares/protected");
 const userRoutes = express.Router();
-
 //Instance of multer
 const upload = multer({storage});
 
@@ -29,14 +28,19 @@ userRoutes.get('/profile', protected, profileCtrl);
 
 //put/profilephoto-upload/:id
 userRoutes.put(
-    '/profile-photo-upload/:id',
+    '/profile-photo-upload/',
     protected,
     upload.single('profile'),
     uploadProfilePhotoCtrl
 );
 
 //put/cover-photo-upload/:id
-userRoutes.put('/cover-photo-upload/:id', uploadCoverImgCtrl);
+userRoutes.put(
+    '/cover-photo-upload/',
+    protected,
+    upload.single("cover"),
+    uploadCoverImgCtrl
+);
 
 //put/update-password/:id
 userRoutes.put('/update-password/:id', updatePasswordCtrl);
