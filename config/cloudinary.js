@@ -6,15 +6,14 @@ const {CloudinaryStorage} = require("multer-storage-cloudinary");
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_KEY,
-    api_secret: CLOUDINARY_SECRET_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET_KEY
 });
-
 //Instance of cloudinary storage
 const storage = new CloudinaryStorage({
     cloudinary,
     allowedFromats: ['jpg', 'jpeg', 'png'],
     params: {
-        folder: 'blog-app-v3',
+        folder: 'blog-app-v1',
         transformation: [{width:500, height:500, crop: "limit"}],
     }
 })
