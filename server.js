@@ -1,270 +1,51 @@
 require("dotenv").config();
 const express = require('express');
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const globalErrhandler = require("./middlewares/globalHandler");
+const commentRoutes = require("./routes/comments/comment");
+const postRoutes = require("./routes/posts/posts");
+const userRoutes = require("./routes/users/users");
 
 require("./config/dbConnect");
 
 const app = express();
 
-
 //middlewares
-//routes
-//-----
+app.use(express.json()); // pass incomming data
+// configure ejs
+app.set("view engine","ejs");
+//serve static files
+app.use(express.static(__dirname,+"/public"));
+// session config
+app.use(
+    session({
+        secret:process.env.SESSION_KEY,
+        resave:false,
+        saveUninitialized: true,
+        store: new MongoStore({
+            mongoUrl: process.env.MONGO_URL,
+            ttl: 24 * 60 * 60, //1 day
+        }),
+    }
+));
+
+//render homepage
+app.get('/',(req,res)=>{
+res.render('index');
+});
+
 //users route
-//-----
-//POST/api/v1/users/register
-app.post('/api/v1/users/register',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User registered",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
+app.use('/api/v1/users', userRoutes);
 
-//POST/api/v1/users/login
-app.post('/api/v1/users/login',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User login",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//GET/api/v1/users/:id
-app.get('/api/v1/users/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User Details",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-
-//GET/api/v1/users/profile/:id
-app.get('/api/v1/users/profile/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User Details",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//put/api/v1/users/profilephoto-upload/:id
-app.put('/api/v1/users/profile-photo-upload/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User profile image upload",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//put/api/v1/users/cover-photo-upload/:id
-app.put('/api/v1/users/cover-photo-upload/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User cover image upload",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//put/api/v1/users/update-password/:id
-app.put('/api/v1/users/update-password/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User password update",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//Get/api/v1/users/logout
-app.get('/api/v1/users/logout',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"User logout",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-
-
-
-//-----
 //post route
-//-----
+app.use('/api/v1/posts', postRoutes);
 
-//POST/api/v1/posts
-app.post('/api/v1/posts',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Post created",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//GET/api/v1/posts
-app.get('/api/v1/posts',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Posts list",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//GET/api/v1/posts/:id
-app.get('/api/v1/posts/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Post details",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//DELETE/api/v1/posts/:id
-app.delete('/api/v1/posts/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Post deleted",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//put/api/v1/posts/:id
-app.put('/api/v1/posts/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Post Updated",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//-----
 //comment
-//-----
-
-//POST/api/v1/comments
-app.post('/api/v1/comments',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"comment created",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-
-//GET/api/v1/comments/:id
-app.get('/api/v1/comments/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Comments details",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-
-//DELETE/api/v1/comments/:id
-app.delete('/api/v1/comments/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Comments deleted",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
-//put/api/v1/comments/:id
-app.put('/api/v1/comments/:id',async(req,res)=>{
-    try {
-        res.json({
-            status: "success",
-            user:"Comment Updated",
-        });
-    }
-    catch(error){
-        res.json(error);
-    }
-}
-);
-
+app.use('/api/v1/comments', commentRoutes);
 
 //Error handler middlewares
+app.use(globalErrhandler);
 //listen server
 
 const PORT = process.env.PORT || 6800
