@@ -22,10 +22,8 @@ const createCommentCtrl = async(req, res, next)=>{
         //disable validation
         await post.save({validateBeforeSave: false});
         await user.save({validateBeforeSave: false});
-        res.json({
-            status: "success",
-            data: comment,
-        });
+        //redirect
+        res.redirect(`/api/v1/posts/${post._id}`);
     }
     catch(error){
         next(appErr(error.message));
@@ -33,32 +31,38 @@ const createCommentCtrl = async(req, res, next)=>{
 };
 
 const commentDetailsCtrl = async(req, res, next)=>{ 
-    try {
-        res.json({
-            status: "success",
-            user:"Post Comments",
+    try { 
+        const { postId } = req.query;
+        const comment = await Comment.findById(req.params.id);
+        res.render('posts/updateComment', {
+            comment,
+            postId,
+            error: "",
         });
     }
     catch(error){
-        next(appErr(error.message));
+        res.render('posts/updateComment', {
+            error: error.message,
+            postId: ""
+        });
     }
 };
 
 const deleteCommentCtrl = async(req, res, next)=>{
     try {
         //find the comment
+        const {postId} = req.query;
         const comment = await Comment.findById(req.params.id);
-        console.log(comment)
+        if (!comment) {
+            return next(appErr("Comment not found", 404));
+        }
         //if the comment belongs to the user
         if (comment.user.toString() !== req.session.userAuth.toString()) {
             return next(appErr("You are not allowed to delete this comment", 403));
         }
         // delete comment
-        const deletedcomment = await Comment.findByIdAndDelete(req.params.id);
-        res.json({
-            status: "success",
-            user: "Comment has been deleted successfully",
-        });
+        await Comment.findByIdAndDelete(req.params.id);
+        return res.redirect(`/api/v1/posts/${postId}`);
     }
     catch(error){
         next(appErr(error.message));
@@ -69,6 +73,7 @@ const updateCommentCtrl = async(req, res, next)=>{
     try {
         //find the comment
         const comment = await Comment.findById(req.params.id);
+        const { postId } = req.query;
         if (!comment) {
             return next(appErr('Comment Not FOUND'));
         }
@@ -82,10 +87,7 @@ const updateCommentCtrl = async(req, res, next)=>{
         }, {
             new: true,
         });
-        res.json({
-            status: "success",
-            data: commentUpdated,
-        });
+        return res.redirect(`/api/v1/posts/${postId}`)
     }
     catch(error){
         next(appErr(error.message));

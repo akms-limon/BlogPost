@@ -49,7 +49,12 @@ const fetchPostCtrl = async(req, res, next)=>{
         // get the id from params
         const id = req.params.id;
         //find the post
-        const post = await Post.findById(id).populate('comments');
+        const post = await Post.findById(id).populate({
+            path: 'comments',
+            populate:{
+                path:'user',
+            },
+        }).populate('user');
         const user = await User.findById(post.user);
         
         res.render('posts/postDetails',{
@@ -94,24 +99,41 @@ const updatePostCtrl = async(req, res, next)=>{
         const post = await Post.findById(req.params.id);
         //if the post belongs to the user
         if (post.user.toString() != req.session.userAuth.toString()) {
-            return next(appErr("You are not allowed to update this post", 403));
+            return res.render('posts/updatePost', {
+                post: "",
+                error: "You are not authorized",
+            });
         }
-        //update
-        const postUpdated = await Post.findByIdAndUpdate(req.params.id, {
-            title, 
-            description,
-            category,
-            image: req.file.path,
-        }, {
-            new: true,
-        });
-        res.json({
-            status: "success",
-            data: postUpdated,
-        });
+        //check if user is updating image
+        if (req.file) {
+            //update with image
+            await Post.findByIdAndUpdate(req.params.id, {
+                title, 
+                description,
+                category,
+                image: req.file.path,
+            }, {
+                new: true,
+            });
+        }
+        else {
+            //update without image
+            await Post.findByIdAndUpdate(req.params.id, {
+                title, 
+                description,
+                category,
+            }, {
+                new: true,
+            });
+        }
+        //redirect
+        res.redirect("/");
     }
     catch(error){
-        next(appErr(error.message));
+        return res.render('posts/updatePost', {
+            post: "",
+            error: error.message,
+        });
     }
 }
 
