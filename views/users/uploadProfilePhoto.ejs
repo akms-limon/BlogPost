@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Fontawesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
     <script
       src="https://kit.fontawesome.com/42a182743f.js"
       crossorigin="anonymous"
@@ -15,27 +18,33 @@
     <title>Upload Profile Photo</title>
   </head>
   <body>
-       <!-- nav -->
-       <%-include('../partials/navbar.ejs')%>
+    <!-- nav -->
+    <%-include('../partials/navbar.ejs')%>
     <div class="form-container">
       <!-- icon -->
       <h1>Upload Profile photo</h1>
       <p>
-        <!-- upload icon -->
+        <%if(error){%>
+        <small class="error">
+          <i class="fas fa-exclamation-circle"></i>
+          <%=error %>
+        </small>
+        <%}%>
       </p>
-      <small class="error">
-        <i class="fas fa-exclamation-circle"></i>
-        Invalid Credentials
-      </small>
-      <form action="/login" method="POST">
+
+      <form
+        action="/api/v1/users/profile-photo-upload?_method=PUT"
+        method="POST"
+        enctype="multipart/form-data"
+      >
         <label for="email">Select Imgae</label>
-        <input type="file" name="image" id="image" />
+        <input type="file" name="profile" id="image" />
         <button type="submit">
           <i class="fas fa-upload"></i>
         </button>
       </form>
     </div>
-       <!-- footer -->
-       <%-include('../partials/footer.ejs')%>
+    <!-- footer -->
+    <%-include('../partials/footer.ejs')%>
   </body>
 </html>
