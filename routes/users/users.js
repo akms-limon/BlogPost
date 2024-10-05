@@ -35,7 +35,6 @@ userRoutes.get('/profile-page',(req,res)=>{
     res.render('users/profile');
     });
 
-
 //upload profile photo
 userRoutes.get('/upload-profile-photo-form',(req,res)=>{
     res.render('users/uploadProfilePhoto');
