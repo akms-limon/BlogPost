@@ -1,28 +1,45 @@
 <!-- nav -->
 <link rel="stylesheet" href="/public/css/style.css" />
- <!-- Fontawesome -->
- <script
- src="https://kit.fontawesome.com/42a182743f.js"
- crossorigin="anonymous"
+<!-- Fontawesome -->
+<script
+  src="https://kit.fontawesome.com/42a182743f.js"
+  crossorigin="anonymous"
 ></script>
 <!-- Google font -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
- href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Roboto:wght@400;500&display=swap"
- rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Roboto:wght@400;500&display=swap"
+  rel="stylesheet"
 />
 <nav>
-    <div>
-      <img src="/public/images/logo.png" alt="logo" />
-    </div>
+  <div>
+    <img src="/public/images/logo.png" alt="logo" />
+  </div>
 
-    <ul>
+  <ul>
+    <%if(userAuth){%>
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/api/v1/users/profile-page">Profile</a>
+    </li>
+    <li>
+      <a href="#">Posts</a>
+    </li> 
+    <li>
+      <a href="#" class="create-post-btn">New Post</a>
+    </li>
+    <li>
+      <a style="background-color: red;" href="/api/v1/users/logout" class="create-post-btn">Logout</a>
+    </li>
+    <%}else{%>
       <li>
-        <a href="/">Home</a>
+      <a href="/">Home</a>
       </li>
       <li>
-        <a href="#">Posts</a>
+      <a href="#">Posts</a>
       </li>
       <li>
         <a href="/api/v1/users/login">Login</a>
@@ -30,11 +47,7 @@
       <li>
         <a href="/api/v1/users/register">Register</a>
       </li>
-      <li>
-        <a href="/api/v1/users/profile-page">Profile</a>
-      </li>
-      <li>
-        <a href="#" class="create-post-btn">New Post</a>
-      </li>
+       <%}%>
+
     </ul>
-  </nav>
+</nav>
