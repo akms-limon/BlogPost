@@ -100,7 +100,8 @@ const profileCtrl = async (req, res) => {
         const userID = req.session.userAuth;
         //find the user 
         const user = await User.findById(userID).populate('posts').populate('comments');
-     res.render("users/profile",{user});
+        console.log(user)
+        return res.render("users/profile",{user});
     }
     catch (error) {
         res.json(error);

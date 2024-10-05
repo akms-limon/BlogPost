@@ -6,7 +6,7 @@ const createPostCtrl = async(req, res, next)=>{
     const {title, description, category, user} = req.body;
     try {
         if (!title || !description || !category || !req.file) {
-            return next(appErr("All fields are required"));
+            return res.render("posts/addPost", {error: "All fields are required"});
         }
         //find the user
         const userId = req.session.userAuth;
@@ -23,19 +23,17 @@ const createPostCtrl = async(req, res, next)=>{
         userFound.posts.push(postCreated._id);
         //re save 
         await userFound.save();
-        res.json({
-            status: "success",
-            data: postCreated,
-        });
+        //redirect 
+        res.redirect("/");
     }
     catch(error){
-        next(appErr(error.message));
+        return res.render("posts/addPost", {error: error.message});    
     }
 };
 
 const fetchPostsCtrl = async(req, res, next)=>{
     try {
-        const posts = await Post.find().populate('comments');
+        const posts = await Post.find().populate('comments').populate("user");
         res.json({
             status: "success",
             data: posts,
@@ -52,10 +50,13 @@ const fetchPostCtrl = async(req, res, next)=>{
         const id = req.params.id;
         //find the post
         const post = await Post.findById(id).populate('comments');
-        res.json({
-            status: "success",
-            data: post,
-        });
+        const user = await User.findById(post.user);
+        
+        res.render('posts/postDetails',{
+            post,
+            user,
+            error: "", 
+        })
     }
     catch(error){
         next(appErr(error.message));
@@ -68,17 +69,21 @@ const deletePostCtrl = async(req, res, next)=>{
         const post = await Post.findById(req.params.id);
         //if the post belongs to the user
         if (post.user.toString() !== req.session.userAuth.toString()) {
-            return next(appErr("You are not allowed to delete this post", 403));
+            return res.render("posts/postDetails", {
+                error: "You are not athorized to delete this post",
+                post,
+            });
         }
         // delete post
         const deletedPost = await Post.findByIdAndDelete(req.params.id);
-        res.json({
-            status: "success",
-            user:"Post has been deleted successfully",
-        });
+        //redirect
+        res.redirect('/');
     }
     catch(error){
-        next(appErr(err.message));
+        return res.render("posts/postDetails", {
+            error: error.message,
+            post:'',
+        });
     }
 };
 

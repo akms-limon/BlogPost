@@ -16,6 +16,12 @@ const upload = multer({
     storage,
 });
 
+//forms 
+
+postRoutes.get('/get-post-form', (req, res) => {
+    res.render('posts/addPost', {error: ""});
+});
+
 //POST/posts
 postRoutes.post('/', protected, upload.single('file'), createPostCtrl);
 

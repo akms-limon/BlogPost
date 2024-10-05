@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema(
     coverImage: {
       type: String,
     },
+    role: {
+      type: String,
+      default: "Blogger",
+    },
+    bio: {
+      type: String,
+      default: "Hello, I'm a software engineer. If you want to know about software engineering then connect with me.",
+    },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   },
