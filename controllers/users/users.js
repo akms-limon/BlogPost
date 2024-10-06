@@ -5,7 +5,6 @@ const appErr = require("../../utils/appErr");
 //register
 const registerCtrl = async (req, res, next) => {
     const { fullname, email, password } = req.body;
-    console.log(req.body);
     // check if field is empty
     if (!fullname || !email || !password) {
         //return next(appErr('All fields are required'));
@@ -31,7 +30,7 @@ const registerCtrl = async (req, res, next) => {
             password: passwordHashed,
         });
         // redirect
-        res.redirect("/api/v1/users/profile-page");
+        res.redirect("/api/v1/users/login");
     }
     catch (error) {
         res.json(error);
@@ -100,7 +99,6 @@ const profileCtrl = async (req, res) => {
         const userID = req.session.userAuth;
         //find the user 
         const user = await User.findById(userID).populate('posts').populate('comments');
-        console.log(user)
         return res.render("users/profile",{user});
     }
     catch (error) {
